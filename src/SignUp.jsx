@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { supabase } from './supaBaseClient'
+
 
 function SignUp() {
     const[formData, setFormData] = useState({
@@ -8,8 +10,11 @@ function SignUp() {
         confirmPassword:''
     })
 
+    const[error, setError] = useState(null)
+    const[message, setMessage] = useState(null)
+
     // if i type, "a", it is reflected in textbox
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -17,15 +22,72 @@ function SignUp() {
     }
 
     // makes sure page doesnt refresh on submit
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // REPLACE!!!!
-        console.log('Form submitted:', formData)
+        setError(null)
+        setMessage(null)
+
+        // check if passwords math
+        if(formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match")
+            return
+        }
+
+        try {
+            //sign up with supabase
+            const { data, error } = await supabase.auth.signUp({
+                email: formData.email,
+                password: formData.password,
+                options: {
+                    data: {
+                        name: formData.name
+                    }
+                }
+            })
+
+            if(error) throw error
+
+            setMessage('Sign up successful! Please check your email to confirm your account.')
+
+            // clear form
+            setFormData({
+                name: '',
+                email: '',
+                password: '',
+                confirmPassword:''
+            })
+        } catch (error) {
+            setError(error.message)
+        }
     }
 
     return (
         <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
           <h2>Sign Up</h2>
+          { error && (
+            <div style={{
+                padding: '10px',
+                marginBottom: '15px',
+                backgroundColor: '#fee',
+                color: '#c00',
+                borderRadius: '4px'
+            }}>
+                {error}
+            </div>
+          )}
+
+          { message && (
+            <div style={{
+                padding: '10px',
+                marginBottom: '15px',
+                backgroundColor: '#efe',
+                color: '#060',
+                borderRadius: '4px'
+            }}>
+                {message}
+                </div>
+            )}
+
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '15px' }}>
               <label htmlFor="name" style={{ display: 'block', marginBottom: '5px'}}>

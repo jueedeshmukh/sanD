@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import SignUp from './SignUp'
@@ -9,6 +10,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false)
 
   return (
+    
     <div>
       <div style={{ textAlign: 'center', marginBottom: '40px', marginTop: '20px' }}>
         <button 
