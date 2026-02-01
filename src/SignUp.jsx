@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { supabase } from './supaBaseClient'
 
 
-function SignUp() {
+function SignUp({ onSignUp }) {
     const[formData, setFormData] = useState({
         name: '',
         email: '',
