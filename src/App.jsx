@@ -3,10 +3,30 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import SignUp from './SignUp'
 import Login from './Login'
+import Onboarding from './Onboarding'
 import './App.css'
 
 function App() {
   const [isLogin, setIsLogin] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [isOnboarded, setIsOnboarded] = useState(false)
+
+  const handleSignUp = () => {
+    setShowOnboarding(true)
+  }
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+    setIsOnboarded(true)
+  }
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={handleOnboardingComplete} />
+  }
+
+  if (isOnboarded) {
+    return <div style={{ textAlign: 'center', marginTop: '50px' }}>Home page coming soon...</div>
+  }
 
   return (
     <div>
@@ -33,7 +53,7 @@ function App() {
           Log In
         </button>
       </div>
-      {isLogin ? <Login /> : <SignUp />}
+      {isLogin ? <Login /> : <SignUp onSignUp={handleSignUp} />}
     </div>
   )
 }

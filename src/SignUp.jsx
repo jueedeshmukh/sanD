@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function SignUp() {
+function SignUp({ onSignUp }) {
     const[formData, setFormData] = useState({
         name: '',
         email: '',
@@ -21,6 +21,7 @@ function SignUp() {
         e.preventDefault()
         // REPLACE!!!!
         console.log('Form submitted:', formData)
+        if (onSignUp) onSignUp()
     }
 
     return (
